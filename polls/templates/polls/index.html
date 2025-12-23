@@ -1,0 +1,51 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<h1>Опросы</h1>
+
+{% if user.is_authenticated %}
+    <p>Добро пожаловать, {{ user.username }}!</p>
+{% else %}
+    <p>Привет, гость! <a href="{% url 'polls:login' %}">Войдите</a> или <a href="{% url 'polls:register' %}">зарегистрируйтесь</a>, чтобы создавать опросы и голосовать.</p>
+{% endif %}
+
+<hr>
+
+{% if latest_question_list %}
+    <h2>Актуальные опросы:</h2>
+    <ul>
+        {% for question in latest_question_list %}
+            <li>
+                <h3>
+                    <a href="{% url 'polls:detail' question.id %}" >
+                        {{ question.question_text }}
+                    </a>
+                </h3>
+                <p>{{ question.short_description }}</p>
+                <small>Опубликовано: {{ question.pub_date|date:"d.m.Y H:i" }}</small><br>
+                <small>Действует до: {{ question.expiration_date|date:"d.m.Y H:i" }}</small>
+
+                {% if not question.is_active %}
+                    <span>(Голосование завершено)</span>
+                {% endif %}
+
+                {% if user.is_superuser %}
+                    <div>
+                        <small>Автор: {{ question.author.username|default:"Неизвестно" }}</small>
+                    </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <div>
+        <h3>Нет активных опросов</h3>
+        <p>Пока нет доступных вопросов для голосования.</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'polls:create_question' %}">
+                Создать первый вопрос
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+{% endblock %}

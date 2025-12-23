@@ -1,0 +1,17 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<div>
+    <h2>Вы успешно вышли из системы</h2>
+    <p>Спасибо за посещение нашего сайта!</p>
+
+    <div>
+        <a href="{% url 'polls:login' %}">
+            Войти снова
+        </a>
+        <a href="{% url 'polls:index' %}">
+            На главную
+        </a>
+    </div>
+</div>
+{% endblock %}

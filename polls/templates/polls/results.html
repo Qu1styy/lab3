@@ -1,0 +1,26 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<h1>{{ question.question_text }}</h1>
+
+{% if question.image %}
+    <img src="{{ question.image.url }}" alt="Изображение к вопросу" style="max-width: 500px;">
+{% endif %}
+
+<h2>Результаты:</h2>
+<p>Всего голосов: {{ total_votes }}</p>
+
+<ul>
+    {% for item in choices_with_percentage %}
+        <li>
+            {{ item.choice.choice_text }} -- {{ item.votes }} голос{{ item.votes|pluralize:"ов" }}
+            ({{ item.percentage }}%)
+            <div>
+                <div style = "width: {{ item.percentage }}%;"></div>
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'polls:detail' question.id %}">Голосовать снова?</a>
+{% endblock %}

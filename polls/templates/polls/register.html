@@ -1,0 +1,62 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<h2>Регистрация</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <h3>Основная информация</h3>
+
+    <p>
+        <label>Имя пользователя:</label><br>
+        {{ form.username }}
+        {% if form.username.errors %}
+            <div>{{ form.username.errors }}</div>
+        {% endif %}
+        <small>Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.</small>
+    </p>
+
+    <p>
+        <label>Email:</label><br>
+        {{ form.email }}
+        {% if form.email.errors %}
+            <div>{{ form.email.errors }}</div>
+        {% endif %}
+    </p>
+
+    <p>
+        <label>Аватар (URL изображения):</label><br>
+        {{ form.avatar_url }}
+        {% if form.avatar_url.errors %}
+            <div>{{ form.avatar_url.errors }}</div>
+        {% endif %}
+        <small>Обязательное поле. Введите URL изображения для вашего аватара.</small>
+    </p>
+
+    <h3>Пароль</h3>
+
+    <p>
+        <label>Пароль:</label><br>
+        {{ form.password1 }}
+        {% if form.password1.errors %}
+            <div>{{ form.password1.errors }}</div>
+        {% endif %}
+        <small>Пароль должен содержать не менее 8 символов, не быть слишком простым и распространенным.</small>
+    </p>
+
+    <p>
+        <label>Подтверждение пароля:</label><br>
+        {{ form.password2 }}
+        {% if form.password2.errors %}
+            <div>{{ form.password2.errors }}</div>
+        {% endif %}
+    </p>
+
+    <p>
+        <button>Зарегистрироваться</button>
+    </p>
+
+    <p>Уже есть аккаунт? <a href="{% url 'polls:login' %}">Войти</a></p>
+</form>
+{% endblock %}

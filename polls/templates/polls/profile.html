@@ -1,0 +1,42 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<h2>Мой профиль</h2>
+
+{% if profile.avatar and profile.avatar.url %}
+    <div>
+        <img src="{{ profile.avatar.url }}" alt="Аватар" style="max-width: 150px; border-radius: 100%;">
+    </div>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <h3>Основная информация</h3>
+
+    <p>
+        <label>Имя пользователя:</label><br>
+        <input type="text" value="{{ user.username }}">
+    </p>
+
+    <p>
+        <label for="id_avatar">Аватар:</label><br>
+        <input type="file" name="avatar" id="id_avatar" accept="image/*" required>
+        <small><strong>Обязательное поле.</strong> Загрузите изображение для аватара</small>
+        {% if form.avatar.errors %}
+            <div>{{ form.avatar.errors }}</div>
+        {% endif %}
+    </p>
+
+    <p>
+        <label for="id_bio">О себе:</label><br>
+        <textarea name="bio" id="id_bio" rows="4" cols="50">{{ profile.bio|default_if_none:'' }}</textarea>
+    </p>
+
+    <p>
+        <button>Сохранить изменения</button>
+        <a href="{% url 'polls:delete_profile' %}" </a>
+        <a href="{% url 'polls:index' %}" </a>
+    </p>
+</form>
+{% endblock %}

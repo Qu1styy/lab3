@@ -1,0 +1,47 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+<h1>{{ question.question_text }}</h1>
+
+{% if question.image %}
+    <img src="{{ question.image.url }}" alt="Изображение к вопросу" style="max-width: 500px;">
+{% endif %}
+
+<p>Полное описание: {{ question.full_description }}</p>
+
+{% if has_voted %}
+    <p>Вы уже голосовали в этом опросе. Вы выбрали: {{ user_choice.choice_text }}</p>
+    <a href="{% url 'polls:results' question.id %}">Посмотреть результаты</a>
+{% else %}
+    {% if question.is_active or user.is_superuser %}
+        <form action="{% url 'polls:vote' question.id %}" method="post">
+            {% csrf_token %}
+            <fieldset>
+                <legend><h2>Выберите вариант:</h2></legend>
+                
+                {% if error_message %}
+                    <p> {{ error_message }}</p>
+                {% endif %}
+                
+                {% for choice in question.choices.all %}
+                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+                {% endfor %}
+            </fieldset>
+            <br>
+            <input value="Проголосовать">
+        </form>
+    {% else %}
+        <p>Голосование по этому вопросу завершено.</p>
+        <a href="{% url 'polls:results' question.id %}">Посмотреть результаты</a>
+    {% endif %}
+{% endif %}
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}
