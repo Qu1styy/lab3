@@ -1,0 +1,15 @@
+{% extends 'base_generic.html' %}
+
+{% block title %}Редактирование профиля{% endblock %}
+
+{% block content %}
+<h2>Редактирование профиля {{ profile_user.username }}</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
+
+<a href="{% url 'polls:user_profile' profile_user.username %}">Отмена</a>
+{% endblock %}
